@@ -1,0 +1,12 @@
+<mat-toolbar class="navbar">
+  <div class="brand">
+    <div class="brand-mark">EM</div>
+    <span class="brand-name">Employee Management</span>
+  </div>
+  <span class="spacer"></span>
+  <span class="user-name" *ngIf="currentUser$ | async as user">Hi, {{ user.name }}</span>
+  <button mat-stroked-button (click)="onLogout()">
+    <mat-icon>logout</mat-icon>
+    Logout
+  </button>
+</mat-toolbar>
