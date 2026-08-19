@@ -52,6 +52,13 @@ export class SignupComponent {
   get email() { return this.signupForm.get('email'); }
   get password() { return this.signupForm.get('password'); }
 
+  get greeting(): string {
+    const hour = new Date().getHours();
+    if (hour < 12) return 'Good morning';
+    if (hour < 17) return 'Good afternoon';
+    return 'Good evening';
+  }
+
   onSubmit(): void {
     if (this.signupForm.invalid) {
       this.signupForm.markAllAsTouched();
