@@ -11,7 +11,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { AuthService } from '../auth.service';
 
 @Component({
-  selector: 'app-login',
+  selector: 'app-forgot-password',
   standalone: true,
   imports: [
     CommonModule,
@@ -21,14 +21,13 @@ import { AuthService } from '../auth.service';
     MatIconModule,
     MatProgressSpinnerModule
   ],
-  templateUrl: './login.component.html',
-  styleUrl: './login.component.scss'
+  templateUrl: './forgot-password.component.html',
+  styleUrl: './forgot-password.component.scss'
 })
-export class LoginComponent implements OnInit, OnDestroy {
-  loginForm: FormGroup;
+export class ForgotPasswordComponent implements OnInit, OnDestroy {
+  form: FormGroup;
   hidePassword = true;
   loading = false;
-  loginError: string | null = null;
 
   slides = [
     {
@@ -55,15 +54,21 @@ export class LoginComponent implements OnInit, OnDestroy {
     private router: Router,
     private snackBar: MatSnackBar
   ) {
-    this.loginForm = this.fb.group({
-      username: ['', [Validators.required]],
-      password: ['', [Validators.required]],
-      rememberMe: [true]
+    this.form = this.fb.group({
+      email: ['', [Validators.required, Validators.email]],
+      newPassword: ['', [Validators.required, Validators.minLength(6)]]
     });
   }
 
-  get username() { return this.loginForm.get('username'); }
-  get password() { return this.loginForm.get('password'); }
+  get email() { return this.form.get('email'); }
+  get newPassword() { return this.form.get('newPassword'); }
+
+  get greeting(): string {
+    const hour = new Date().getHours();
+    if (hour < 12) return 'Good morning';
+    if (hour < 17) return 'Good afternoon';
+    return 'Good evening';
+  }
 
   ngOnInit(): void {
     this.slideInterval = setInterval(() => {
@@ -80,24 +85,23 @@ export class LoginComponent implements OnInit, OnDestroy {
   }
 
   onSubmit(): void {
-    if (this.loginForm.invalid) {
-      this.loginForm.markAllAsTouched();
+    if (this.form.invalid) {
+      this.form.markAllAsTouched();
       return;
     }
 
     this.loading = true;
-    this.loginError = null;
-    const { username, password, rememberMe } = this.loginForm.value;
+    const { email, newPassword } = this.form.value;
 
-    this.authService.login(username, password, rememberMe).subscribe({
+    this.authService.resetPassword(email, newPassword).subscribe({
       next: () => {
         this.loading = false;
-        this.router.navigate(['/dashboard']);
+        this.snackBar.open('Password reset! Please log in.', 'Close', { duration: 3000 });
+        this.router.navigate(['/login']);
       },
       error: (err) => {
         this.loading = false;
-        const msg = err?.error?.message || 'Invalid user name or password.';
-        this.loginError = msg;
+        const msg = err?.error?.message || 'Could not reset password. Please try again.';
         this.snackBar.open(msg, 'Close', { duration: 3000 });
       }
     });

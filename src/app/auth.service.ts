@@ -1,12 +1,13 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Router } from '@angular/router';
-import { BehaviorSubject, Observable, tap } from 'rxjs';
+import { BehaviorSubject, Observable, of, tap } from 'rxjs';
+import { catchError, map } from 'rxjs/operators';
 
 interface AuthResponse {
   message: string;
   token: string;
-  user: { id: string; name: string; email: string };
+  user: { id: string; name: string; username: string; email: string };
 }
 
 const API_URL = 'http://localhost:5050/api';
@@ -20,41 +21,56 @@ export class AuthService {
 
   constructor(private http: HttpClient, private router: Router) {}
 
-  signup(name: string, email: string, password: string): Observable<any> {
-    return this.http.post(`${API_URL}/signup`, { name, email, password });
+  signup(name: string, username: string, email: string, password: string): Observable<any> {
+    return this.http.post(`${API_URL}/signup`, { name, username, email, password });
   }
 
-  login(email: string, password: string): Observable<AuthResponse> {
-    return this.http.post<AuthResponse>(`${API_URL}/login`, { email, password }).pipe(
+  checkUsernameAvailable(username: string): Observable<boolean> {
+    return this.http
+      .get<{ available: boolean }>(`${API_URL}/check-username`, { params: { username } })
+      .pipe(
+        map(res => res.available),
+        catchError(() => of(true))
+      );
+  }
+
+  login(username: string, password: string, rememberMe: boolean = true): Observable<AuthResponse> {
+    return this.http.post<AuthResponse>(`${API_URL}/login`, { username, password }).pipe(
       tap(res => {
-        localStorage.setItem(TOKEN_KEY, res.token);
-        localStorage.setItem(USER_KEY, JSON.stringify(res.user));
+        const storage = rememberMe ? localStorage : sessionStorage;
+        storage.setItem(TOKEN_KEY, res.token);
+        storage.setItem(USER_KEY, JSON.stringify(res.user));
         this.currentUserSubject.next(res.user);
       })
     );
   }
 
+  resetPassword(email: string, newPassword: string): Observable<any> {
+    return this.http.post(`${API_URL}/forgot-password`, { email, newPassword });
+  }
+
   logout(): void {
-    // Tell backend to blacklist this token, then clear local storage regardless of response
     this.http.post(`${API_URL}/logout`, {}, { headers: this.authHeaders() }).subscribe({
       next: () => this.clearSession(),
-      error: () => this.clearSession() // still log out locally even if request fails
+      error: () => this.clearSession()
     });
   }
 
   private clearSession(): void {
     localStorage.removeItem(TOKEN_KEY);
     localStorage.removeItem(USER_KEY);
+    sessionStorage.removeItem(TOKEN_KEY);
+    sessionStorage.removeItem(USER_KEY);
     this.currentUserSubject.next(null);
     this.router.navigate(['/login']);
   }
 
   getToken(): string | null {
-    return localStorage.getItem(TOKEN_KEY);
+    return localStorage.getItem(TOKEN_KEY) || sessionStorage.getItem(TOKEN_KEY);
   }
 
   private getStoredUser(): any {
-    const raw = localStorage.getItem(USER_KEY);
+    const raw = localStorage.getItem(USER_KEY) || sessionStorage.getItem(USER_KEY);
     return raw ? JSON.parse(raw) : null;
   }
 
@@ -66,4 +82,4 @@ export class AuthService {
     const token = this.getToken();
     return { Authorization: `Bearer ${token}` };
   }
-}
+} 
