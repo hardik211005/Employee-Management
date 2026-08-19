@@ -66,6 +66,14 @@ export class LoginComponent implements OnInit, OnDestroy {
   get password() { return this.loginForm.get('password'); }
 
   ngOnInit(): void {
+    this.startAutoRotate();
+  }
+
+  ngOnDestroy(): void {
+    clearInterval(this.slideInterval);
+  }
+
+  private startAutoRotate(): void {
     this.slideInterval = setInterval(() => {
       this.slideVisible = false;
       setTimeout(() => {
@@ -75,8 +83,18 @@ export class LoginComponent implements OnInit, OnDestroy {
     }, 3500);
   }
 
-  ngOnDestroy(): void {
+  goToSlide(index: number): void {
+    if (index === this.currentSlide) return;
+
     clearInterval(this.slideInterval);
+
+    this.slideVisible = false;
+    setTimeout(() => {
+      this.currentSlide = index;
+      this.slideVisible = true;
+    }, 300);
+
+    this.startAutoRotate();
   }
 
   onSubmit(): void {
