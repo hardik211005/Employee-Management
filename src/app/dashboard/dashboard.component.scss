@@ -534,7 +534,6 @@
 }
 
 
-/* Reference-style graph finishing */
 .availability-card .card-header,
 .commands-card .card-header {
   margin-bottom: 2px;
@@ -549,8 +548,6 @@
   align-self: center;
 }
 
-
-/* Reference-style graph controls */
 .commands-header-right {
   gap: 14px;
 }
@@ -583,7 +580,6 @@
 }
 
 
-/* v4 fixes */
 .commands-card .card-header {
   align-items: center;
 }
@@ -629,10 +625,6 @@
   }
 }
 
-
-/* ===== Reference matching final pass ===== */
-
-/* KPI cards: reference has content vertically centered with much less dead space */
 .stat-card {
   justify-content: center;
   padding: 14px 18px;
@@ -650,7 +642,6 @@
   line-height: 1;
 }
 
-/* Reference dropdowns are plain text + arrow, not bordered boxes */
 .table-card .circle-filter,
 .donut-card .circle-filter {
   min-width: auto;
@@ -667,12 +658,12 @@
   outline: none;
 }
 
-/* Node availability has no All circles control in reference */
+
 .availability-card .header-right {
   margin-left: auto;
 }
 
-/* Commands per Node has only Failed / Success in header */
+
 .commands-header-right {
   gap: 0;
 }
@@ -681,7 +672,6 @@
   gap: 14px;
 }
 
-/* Donut: reference keeps generous breathing room around chart and legend */
 .donut-card {
   padding: 14px 18px 14px;
 }
@@ -704,7 +694,6 @@
   align-self: center;
 }
 
-/* Animated ring used by RUNNING rows */
 .running-spinner {
   width: 16px;
   height: 16px;
@@ -726,15 +715,11 @@
   color: #273142;
 }
 
-/* Keep reference-like rounded floating bar segments */
 .availability-card canvas {
   overflow: visible;
 }
 
 
-/* ===== v6 exact reference alignment ===== */
-
-/* KPI content: reference content sits further inside the card and is vertically balanced */
 .stat-card {
   justify-content: center;
   align-items: flex-start;
@@ -757,8 +742,6 @@
   margin-top: 2px;
 }
 
-/* Donut card: keep donut + legend as one compact centered group,
-   instead of stretching them across the entire card width */
 .donut-body {
   width: min(100%, 430px);
   margin: 0 auto;
@@ -805,12 +788,11 @@
   line-height: 1.05;
 }
 
-/* Keep the reference's compact header */
+
 .donut-card .card-header {
   margin-bottom: 0;
 }
 
-/* On smaller dashboard widths, preserve the same composition */
 @media (max-width: 1400px) {
   .donut-body {
     width: min(100%, 390px);
@@ -825,9 +807,6 @@
 }
 
 
-/* ===== v7 KPI position match =====
-   Center the whole KPI content block inside each card while keeping
-   the icon/text left-aligned within that block, like the reference. */
 .stat-card {
   align-items: center;
   justify-content: center;
@@ -860,22 +839,16 @@
   }
 }
 
-
-/* ===== v8 donut legend spacing match ===== */
-
-/* Reference has a taller, looser vertical rhythm between Live / Alarm / Down / Unknown */
 .donut-legend {
   gap: 16px;
   padding-top: 2px;
 }
 
-/* Keep each legend row airy instead of compressed */
 .donut-legend-item {
   min-height: 30px;
   align-items: flex-start;
 }
 
-/* Dot sits slightly lower, aligned with the value line */
 .donut-legend-item .legend-dot {
   width: 9px;
   height: 9px;
@@ -884,7 +857,6 @@
   flex: 0 0 9px;
 }
 
-/* Value/label spacing like reference */
 .legend-value {
   font-size: 13px;
   font-weight: 700;
@@ -897,14 +869,12 @@
   line-height: 1.05;
 }
 
-/* Give the legend a touch more horizontal breathing room */
+
 .donut-body {
   grid-template-columns: minmax(220px, 285px) 112px;
   column-gap: 14px;
 }
 
-
-/* ===== v9 larger donut / tighter reference layout ===== */
 
 .donut-card {
   padding: 12px 16px 10px;
@@ -950,8 +920,6 @@
 }
 
 
-/* ===== v10: open, larger right-side donut legend like reference ===== */
-
 .donut-card {
   padding: 12px 14px 10px;
 }
@@ -967,7 +935,6 @@
   column-gap: 18px;
 }
 
-/* Slightly pull donut left so the legend gets proper breathing room */
 .donut-wrap {
   width: 96%;
   height: 96%;
@@ -977,7 +944,6 @@
   align-self: center;
 }
 
-/* This was the real issue: make the legend physically larger and more open */
 .donut-legend {
   width: 145px;
   justify-self: start;
@@ -1041,8 +1007,6 @@
 }
 
 
-/* ===== v11 Commands per Node reference controls ===== */
-
 .commands-header-right {
   display: flex;
   align-items: center;
@@ -1074,7 +1038,6 @@
 }
 
 
-/* ===== v14 reference donut ===== */
 .donut-body {
   grid-template-columns: minmax(0, 1fr) 145px;
   column-gap: 12px;
@@ -1090,14 +1053,11 @@
 }
 
 
-/* ===== v16 smaller KPI cards like reference ===== */
-
-/* Make the left KPI section narrower so each card matches the reference proportions */
 .top-row {
   grid-template-columns: 390px 1fr;
 }
 
-/* Smaller cards with tighter gaps */
+
 .stats-grid {
   gap: 12px;
 }
@@ -1107,7 +1067,6 @@
   padding: 10px 14px;
 }
 
-/* Keep content proportionate after reducing the card size */
 .stat-inner {
   width: 74%;
   max-width: 145px;
@@ -1150,8 +1109,6 @@
 }
 
 
-/* ===== v22 Execution History overflow + row menu ===== */
-
 .table-card .table-body {
   overflow-y: auto;
   overflow-x: hidden;
@@ -1159,7 +1116,7 @@
   scrollbar-gutter: stable;
 }
 
-/* WebKit scrollbar */
+
 .table-card .table-body::-webkit-scrollbar {
   width: 6px;
 }
@@ -1177,7 +1134,7 @@
   background: #aeb7c4;
 }
 
-/* Firefox */
+
 .table-card .table-body {
   scrollbar-width: thin;
   scrollbar-color: #cfd5df transparent;
@@ -1217,9 +1174,7 @@
 }
 
 
-/* ===== v23: always-visible Execution History scrollbar ===== */
 
-/* Important: this element needs a constrained height for overflow to exist */
 .table-card {
   min-height: 0;
 }
@@ -1227,27 +1182,103 @@
 .table-card .table-body {
   flex: 1 1 0;
   min-height: 0;
-  max-height: 100%;
+  height: 0;
   overflow-y: scroll !important;
   overflow-x: hidden;
-  padding-right: 8px;
+  padding-right: 5px;
+  scrollbar-gutter: stable;
 }
 
+
 .table-card .table-body::-webkit-scrollbar {
-  width: 10px;
+  width: 7px;
 }
 
 .table-card .table-body::-webkit-scrollbar-track {
-  background: #eef1f5;
-  border-radius: 10px;
+  background: #f1f3f6;
+  border-radius: 999px;
 }
 
 .table-card .table-body::-webkit-scrollbar-thumb {
-  background: #8f99a8;
-  border-radius: 10px;
-  border: 2px solid #eef1f5;
+  background: #aeb6c3;
+  border-radius: 999px;
+  min-height: 32px;
 }
 
 .table-card .table-body::-webkit-scrollbar-thumb:hover {
-  background: #737d8c;
+  background: #8f99a8;
+}
+
+
+.table-card .table-body {
+  scrollbar-width: thin;
+  scrollbar-color: #aeb6c3 #f1f3f6;
+}
+
+
+:host-context(.dark-theme) .dashboard-page {
+  background: linear-gradient(135deg, #101827 0%, #17233b 52%, #1d2b48 100%);
+}
+
+:host-context(.dark-theme) .card,
+:host-context(.dark-theme) .stat-card {
+  background: #1b2536;
+  box-shadow: 0 5px 18px rgba(0, 0, 0, 0.28);
+}
+
+:host-context(.dark-theme) .card-header h3,
+:host-context(.dark-theme) .stat-value,
+:host-context(.dark-theme) .exec-status.running,
+:host-context(.dark-theme) .legend-value {
+  color: #f4f7fb;
+}
+
+:host-context(.dark-theme) .stat-label,
+:host-context(.dark-theme) .exec-meta,
+:host-context(.dark-theme) .legend-inline,
+:host-context(.dark-theme) .legend-label,
+:host-context(.dark-theme) .stat-subnote {
+  color: #aeb8cc;
+}
+
+:host-context(.dark-theme) .exec-row {
+  border-bottom-color: #303b50;
+}
+
+:host-context(.dark-theme) .exec-id {
+  color: #8ca8ff;
+}
+
+:host-context(.dark-theme) .circle-filter,
+:host-context(.dark-theme) .commands-circle-filter {
+  color: #dce4f2 !important;
+  background-color: transparent !important;
+}
+
+:host-context(.dark-theme) .circle-filter option {
+  color: #eaf0f8;
+  background: #1b2536;
+}
+
+:host-context(.dark-theme) .exec-more-btn {
+  color: #aeb8cc;
+}
+
+:host-context(.dark-theme) .exec-more-btn:hover {
+  color: #ffffff;
+  background: #263247;
+}
+
+:host-context(.dark-theme) .table-card .table-body::-webkit-scrollbar-track {
+  background: #202b3d;
+}
+
+:host-context(.dark-theme) .table-card .table-body::-webkit-scrollbar-thumb {
+  background: #58667c;
+}
+
+:host-context(.dark-theme) .running-spinner {
+  border-color: #53627a;
+  border-top-color: #8ca8ff;
+  border-right-color: #8ca8ff;
 }

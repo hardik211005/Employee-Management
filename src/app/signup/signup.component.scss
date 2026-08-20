@@ -48,7 +48,6 @@
   overflow: hidden;
 }
 
-/* ---- Left: form panel ---- */
 
 .form-panel {
   flex: 1 1 50%;
@@ -101,8 +100,6 @@
   font-weight: 500;
   margin: 0 0 28px;
 }
-
-/* ---- Raw pill-style fields ---- */
 
 .field {
   display: flex;
@@ -264,7 +261,6 @@
   }
 }
 
-/* ---- Right: promo panel ---- */
 
 .promo-panel {
   position: relative;
@@ -361,7 +357,6 @@
   background: #fff;
 }
 
-/* ---- Responsive: width-based ---- */
 
 @media (max-width: 840px) {
   .promo-panel {
@@ -393,7 +388,6 @@
   }
 }
 
-/* ---- Responsive: short viewports (prevents scroll — signup has an extra field) ---- */
 
 @media (max-height: 760px) {
   .form-panel {

@@ -85,12 +85,24 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
   private dataLoaded = false;
   private viewInitialized = false;
 
+  isDarkMode = false;
+
+  private readonly themeChangeHandler = (event: Event): void => {
+    const customEvent = event as CustomEvent<{ dark: boolean }>;
+    this.isDarkMode = customEvent.detail?.dark ?? document.documentElement.classList.contains('dark-theme');
+    this.refreshChartsForTheme();
+    this.cdr.detectChanges();
+  };
+
   constructor(
     private dashboardService: DashboardService,
     private cdr: ChangeDetectorRef
   ) {}
 
   ngOnInit(): void {
+    this.isDarkMode = document.documentElement.classList.contains('dark-theme');
+    window.addEventListener('dashboard-theme-change', this.themeChangeHandler);
+
     this.dashboardService.getDashboardData().subscribe({
       next: (data) => {
         this.rawData = data;
@@ -114,6 +126,7 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
+    window.removeEventListener('dashboard-theme-change', this.themeChangeHandler);
     this.nodeAvailabilityChart?.destroy();
     this.commandStatusChart?.destroy();
     this.commandsPerNodeChart?.destroy();
@@ -137,6 +150,18 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
   onCommandsPerNodeCircleChange(): void {
     this.applyCommandsPerNode();
     this.updateCommandsPerNodeChart();
+  }
+
+  private refreshChartsForTheme(): void {
+    if (!this.dataLoaded || !this.viewInitialized) return;
+
+    this.nodeAvailabilityChart?.destroy();
+    this.commandStatusChart?.destroy();
+    this.commandsPerNodeChart?.destroy();
+
+    this.renderNodeAvailabilityChart();
+    this.renderCommandStatusChart();
+    this.renderCommandsPerNodeChart();
   }
 
   private applyData(): void {
@@ -188,9 +213,6 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
       : data.circles.filter(c => c.circleCode === this.selectedNodeAvailCircle);
 
     this.nodeAvailabilityLabels = filtered.map(c => c.circleCode);
-
-    // Keep Up based on the API, but give Down the same strong visual presence
-    // as the supplied reference dashboard.
     this.nodeAvailabilityUp = filtered.map(c => c.upNodes);
     this.nodeAvailabilityDown = filtered.map(c => {
       const visualDown = Math.max(c.downNodes, Math.round(c.upNodes * 0.55));
@@ -199,8 +221,6 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   private applyCommandStatus(): void {
-    // Reference-style demo distribution.
-    // Adjust these four values anytime you want to change the donut proportions.
     this.commandStatus = [
       { label: 'Live', value: 1562, color: '#2f8f16' },
       { label: 'Alarm', value: 470, color: '#e58a00' },
@@ -208,7 +228,6 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
       { label: 'Unknown', value: 300, color: '#8f83b5' }
     ];
 
-    // Keep the centre text exactly like the supplied reference.
     this.commandStatusTotal = 1562;
   }
 
@@ -224,8 +243,6 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
           n.circle_code === selectedCircle
         );
 
-    // If the current API does not attach circle on each node record,
-    // don't blank the chart; keep all data until backend adds it.
     const nodes = selectedCircle !== ALL_CIRCLES && source.length === 0
       ? data.commandsPerNode
       : source;
@@ -313,17 +330,17 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
           x: {
             stacked: false,
             grid: { display: false },
-            border: { color: '#dfe4ec' },
-            ticks: { color: '#6f7785', font: { size: 10 }, autoSkip: false, maxRotation: 0, padding: 7 },
-            title: { display: true, text: 'Circles', color: '#737b8a', font: { size: 10 }, padding: { top: 8 } }
+            border: { color: this.isDarkMode ? '#465269' : '#dfe4ec' },
+            ticks: { color: this.isDarkMode ? '#aeb8cc' : '#6f7785', font: { size: 10 }, autoSkip: false, maxRotation: 0, padding: 7 },
+            title: { display: true, text: 'Circles', color: this.isDarkMode ? '#aeb8cc' : '#737b8a', font: { size: 10 }, padding: { top: 8 } }
           },
           y: {
             stacked: false,
             beginAtZero: true,
-            title: { display: true, text: 'Node Count', color: '#737b8a', font: { size: 10 } },
-            grid: { color: '#e9edf3', lineWidth: 1 },
+            title: { display: true, text: 'Node Count', color: this.isDarkMode ? '#aeb8cc' : '#737b8a', font: { size: 10 } },
+            grid: { color: this.isDarkMode ? '#303b50' : '#e9edf3', lineWidth: 1 },
             border: { display: false },
-            ticks: { color: '#6f7785', font: { size: 10 }, padding: 6 }
+            ticks: { color: this.isDarkMode ? '#aeb8cc' : '#6f7785', font: { size: 10 }, padding: 6 }
           }
         }
       }
@@ -372,20 +389,15 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
         const innerRadius = firstArc.innerRadius;
 
         ctx.save();
-
-        // Separate centre disc with visible soft drop-shadow,
-        // matching the supplied reference image.
-        ctx.shadowColor = 'rgba(15, 23, 42, 0.28)';
+        ctx.shadowColor = this.isDarkMode ? 'rgba(0, 0, 0, 0.55)' : 'rgba(15, 23, 42, 0.28)';
         ctx.shadowBlur = 9;
         ctx.shadowOffsetX = 0;
         ctx.shadowOffsetY = 2;
 
         ctx.beginPath();
         ctx.arc(centerX, centerY, innerRadius - 14, 0, Math.PI * 2);
-        ctx.fillStyle = '#f2f2ef';
+        ctx.fillStyle = this.isDarkMode ? '#202a3b' : '#f2f2ef';
         ctx.fill();
-
-        // Remove shadow before drawing the text.
         ctx.shadowColor = 'transparent';
         ctx.shadowBlur = 0;
         ctx.shadowOffsetX = 0;
@@ -395,11 +407,11 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
         ctx.textBaseline = 'middle';
 
         ctx.font = '700 20px -apple-system, BlinkMacSystemFont, Segoe UI, sans-serif';
-        ctx.fillStyle = '#111827';
+        ctx.fillStyle = this.isDarkMode ? '#f4f7fb' : '#111827';
         ctx.fillText(String(this.commandStatusTotal), centerX, centerY - 10);
 
         ctx.font = '400 10px -apple-system, BlinkMacSystemFont, Segoe UI, sans-serif';
-        ctx.fillStyle = '#667085';
+        ctx.fillStyle = this.isDarkMode ? '#aeb8cc' : '#667085';
         ctx.fillText('Total', centerX, centerY + 8);
         ctx.fillText('Commands', centerX, centerY + 21);
 
@@ -478,25 +490,25 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
         scales: {
           x: {
             grid: { display: false },
-            border: { color: '#dfe4ec' },
-            ticks: { color: '#6f7785', font: { size: 10 }, maxRotation: 0 },
+            border: { color: this.isDarkMode ? '#465269' : '#dfe4ec' },
+            ticks: { color: this.isDarkMode ? '#aeb8cc' : '#6f7785', font: { size: 10 }, maxRotation: 0 },
             title: {
               display: true,
               text: 'Nodes',
-              color: '#6f7785',
+              color: this.isDarkMode ? '#aeb8cc' : '#6f7785',
               font: { size: 10, weight: 400 },
               padding: { top: 7 }
             }
           },
           y: {
             beginAtZero: true,
-            grid: { color: '#e9edf3', lineWidth: 1 },
+            grid: { color: this.isDarkMode ? '#303b50' : '#e9edf3', lineWidth: 1 },
             border: { display: false },
-            ticks: { color: '#6f7785', font: { size: 10 }, padding: 6 },
+            ticks: { color: this.isDarkMode ? '#aeb8cc' : '#6f7785', font: { size: 10 }, padding: 6 },
             title: {
               display: true,
               text: 'Count',
-              color: '#6f7785',
+              color: this.isDarkMode ? '#aeb8cc' : '#6f7785',
               font: { size: 10, weight: 400 },
               padding: { bottom: 6 }
             }
@@ -513,8 +525,7 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
       i === index ? !item.hidden : item.hidden
     );
 
-    // Clicking the already-selected item restores both series.
-    // Otherwise, show only the clicked series so the graph acts like a filter.
+
     this.commandsPerNodeLegend.forEach((item, i) => {
       item.hidden = clickedIsOnlyVisible ? false : i !== index;
 

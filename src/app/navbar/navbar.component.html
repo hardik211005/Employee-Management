@@ -14,6 +14,16 @@
 
   <span class="spacer"></span>
 
+  <button
+    type="button"
+    class="theme-toggle"
+    (click)="toggleTheme()"
+    [attr.aria-label]="isDarkMode ? 'Switch to light mode' : 'Switch to dark mode'"
+    [attr.title]="isDarkMode ? 'Light mode' : 'Dark mode'"
+  >
+    <mat-icon>{{ isDarkMode ? 'light_mode' : 'dark_mode' }}</mat-icon>
+  </button>
+
   <button class="user-menu-trigger" [matMenuTriggerFor]="userMenu">
     <div class="avatar" *ngIf="currentUser$ | async as user">
       {{ user.name.charAt(0).toUpperCase() }}
@@ -23,7 +33,7 @@
   </button>
 
   <mat-menu #userMenu="matMenu">
-        <button mat-menu-item class="logout-item" (click)="onLogout()">
+    <button mat-menu-item (click)="onLogout()">
       <mat-icon>logout</mat-icon>
       <span>Logout</span>
     </button>
