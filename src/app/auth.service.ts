@@ -81,5 +81,6 @@ export class AuthService {
   private authHeaders() {
     const token = this.getToken();
     return { Authorization: `Bearer ${token}` };
+  
   }
 } 

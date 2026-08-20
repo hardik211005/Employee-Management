@@ -234,9 +234,6 @@
   box-shadow: 0 10px 22px rgba(21, 103, 201, 0.32);
   margin-top: 4px;
 }
-
-// Angular Material's own button styles can win the cascade on width/height —
-// this pins it down regardless of theme load order.
 ::ng-deep .submit-btn.mat-mdc-raised-button {
   width: 100%;
   height: 52px;
@@ -279,7 +276,6 @@
   background: linear-gradient(160deg, #0a3d7a 0%, #1567c9 45%, #4db4ff 100%);
 }
 
-// Soft diagonal flowing light streaks (rotated so they read as motion, not hard lines)
 .promo-panel::before {
   content: '';
   position: absolute;
@@ -295,7 +291,6 @@
     radial-gradient(ellipse 55% 14% at 75% 82%, rgba(255, 255, 255, 0.08), transparent 70%);
 }
 
-// Soft corner glow accents for depth
 .promo-panel::after {
   content: '';
   position: absolute;

@@ -1,12 +1,31 @@
 <mat-toolbar class="navbar">
   <div class="brand">
-    <div class="brand-mark">EM</div>
-    <span class="brand-name">Employee Management</span>
+    <img src="images/jio-logo.png" alt="Jio" class="brand-logo" />
+    <div class="brand-text">
+      Centralised RAN<br />
+      Network Insight &amp;<br />
+      Operations Centre
+    </div>
   </div>
+
+  <nav class="nav-links">
+    <span class="nav-item active">Dashboard</span>
+  </nav>
+
   <span class="spacer"></span>
-  <span class="user-name" *ngIf="currentUser$ | async as user">Hi, {{ user.name }}</span>
-  <button mat-stroked-button (click)="onLogout()">
-    <mat-icon>logout</mat-icon>
-    Logout
+
+  <button class="user-menu-trigger" [matMenuTriggerFor]="userMenu">
+    <div class="avatar" *ngIf="currentUser$ | async as user">
+      {{ user.name.charAt(0).toUpperCase() }}
+    </div>
+    <span class="user-name" *ngIf="currentUser$ | async as user">{{ user.name }}</span>
+    <mat-icon class="chevron">expand_more</mat-icon>
   </button>
+
+  <mat-menu #userMenu="matMenu">
+    <button mat-menu-item (click)="onLogout()">
+      <mat-icon>logout</mat-icon>
+      <span>Logout</span>
+    </button>
+  </mat-menu>
 </mat-toolbar>
