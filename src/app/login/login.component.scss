@@ -337,18 +337,30 @@
   position: absolute;
   left: 40px;
   bottom: 28px;
-  z-index: 1;
+  z-index: 2;
   display: flex;
   gap: 6px;
 }
 
 .dot {
+  position: relative;
   width: 8px;
   height: 8px;
   border-radius: 50%;
   background: rgba(255, 255, 255, 0.35);
   transition: width 0.3s ease, background-color 0.3s ease;
   cursor: pointer;
+  pointer-events: auto;
+
+  &::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 24px;
+    height: 24px;
+    transform: translate(-50%, -50%);
+  }
 }
 
 .dot.active {

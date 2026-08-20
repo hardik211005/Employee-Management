@@ -1215,3 +1215,39 @@
   font-size: 18px;
   line-height: 18px;
 }
+
+
+/* ===== v23: always-visible Execution History scrollbar ===== */
+
+/* Important: this element needs a constrained height for overflow to exist */
+.table-card {
+  min-height: 0;
+}
+
+.table-card .table-body {
+  flex: 1 1 0;
+  min-height: 0;
+  max-height: 100%;
+  overflow-y: scroll !important;
+  overflow-x: hidden;
+  padding-right: 8px;
+}
+
+.table-card .table-body::-webkit-scrollbar {
+  width: 10px;
+}
+
+.table-card .table-body::-webkit-scrollbar-track {
+  background: #eef1f5;
+  border-radius: 10px;
+}
+
+.table-card .table-body::-webkit-scrollbar-thumb {
+  background: #8f99a8;
+  border-radius: 10px;
+  border: 2px solid #eef1f5;
+}
+
+.table-card .table-body::-webkit-scrollbar-thumb:hover {
+  background: #737d8c;
+}

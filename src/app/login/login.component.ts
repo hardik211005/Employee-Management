@@ -73,13 +73,9 @@ export class LoginComponent implements OnInit, OnDestroy {
     clearInterval(this.slideInterval);
   }
 
-  private startAutoRotate(): void {
+    private startAutoRotate(): void {
     this.slideInterval = setInterval(() => {
-      this.slideVisible = false;
-      setTimeout(() => {
-        this.currentSlide = (this.currentSlide + 1) % this.slides.length;
-        this.slideVisible = true;
-      }, 300);
+      this.currentSlide = (this.currentSlide + 1) % this.slides.length;
     }, 3500);
   }
 
@@ -87,13 +83,7 @@ export class LoginComponent implements OnInit, OnDestroy {
     if (index === this.currentSlide) return;
 
     clearInterval(this.slideInterval);
-
-    this.slideVisible = false;
-    setTimeout(() => {
-      this.currentSlide = index;
-      this.slideVisible = true;
-    }, 300);
-
+    this.currentSlide = index;
     this.startAutoRotate();
   }
 
