@@ -42,13 +42,28 @@ export interface DashboardData {
 
 const API_URL = 'http://localhost:5050/api';
 
-@Injectable({ providedIn: 'root' })
+@Injectable({
+  providedIn: 'root'
+})
 export class DashboardService {
-  constructor(private http: HttpClient, private authService: AuthService) {}
+  private apiUrl = 'http://localhost:5050/api';
 
-  getDashboardData(): Observable<DashboardData> {
+  constructor(
+    private http: HttpClient,
+    private authService: AuthService
+  ) {}
+
+  getDashboardData(): Observable<any> {
     const token = this.authService.getToken();
-    const headers = token ? new HttpHeaders({ Authorization: `Bearer ${token}` }) : undefined;
-    return this.http.get<DashboardData>(`${API_URL}/dashboard`, { headers });
+
+    const headers = new HttpHeaders().set(
+      'Authorization',
+      `Bearer ${token}`
+    );
+
+    return this.http.get<any>(
+      `${this.apiUrl}/dashboard`,
+      { headers }
+    );
   }
 }

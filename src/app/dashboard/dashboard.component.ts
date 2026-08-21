@@ -213,6 +213,9 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
       : data.circles.filter(c => c.circleCode === this.selectedNodeAvailCircle);
 
     this.nodeAvailabilityLabels = filtered.map(c => c.circleCode);
+
+    // Keep Up based on the API, but give Down the same strong visual presence
+    // as the supplied reference dashboard.
     this.nodeAvailabilityUp = filtered.map(c => c.upNodes);
     this.nodeAvailabilityDown = filtered.map(c => {
       const visualDown = Math.max(c.downNodes, Math.round(c.upNodes * 0.55));
@@ -221,6 +224,8 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   private applyCommandStatus(): void {
+    // Reference-style demo distribution.
+    // Adjust these four values anytime you want to change the donut proportions.
     this.commandStatus = [
       { label: 'Live', value: 1562, color: '#2f8f16' },
       { label: 'Alarm', value: 470, color: '#e58a00' },
@@ -228,6 +233,7 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
       { label: 'Unknown', value: 300, color: '#8f83b5' }
     ];
 
+    // Keep the centre text exactly like the supplied reference.
     this.commandStatusTotal = 1562;
   }
 
@@ -243,6 +249,8 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
           n.circle_code === selectedCircle
         );
 
+    // If the current API does not attach circle on each node record,
+    // don't blank the chart; keep all data until backend adds it.
     const nodes = selectedCircle !== ALL_CIRCLES && source.length === 0
       ? data.commandsPerNode
       : source;
@@ -389,6 +397,9 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
         const innerRadius = firstArc.innerRadius;
 
         ctx.save();
+
+        // Separate centre disc with visible soft drop-shadow,
+        // matching the supplied reference image.
         ctx.shadowColor = this.isDarkMode ? 'rgba(0, 0, 0, 0.55)' : 'rgba(15, 23, 42, 0.28)';
         ctx.shadowBlur = 9;
         ctx.shadowOffsetX = 0;
@@ -398,6 +409,8 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
         ctx.arc(centerX, centerY, innerRadius - 14, 0, Math.PI * 2);
         ctx.fillStyle = this.isDarkMode ? '#202a3b' : '#f2f2ef';
         ctx.fill();
+
+        // Remove shadow before drawing the text.
         ctx.shadowColor = 'transparent';
         ctx.shadowBlur = 0;
         ctx.shadowOffsetX = 0;
@@ -525,7 +538,8 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
       i === index ? !item.hidden : item.hidden
     );
 
-
+    // Clicking the already-selected item restores both series.
+    // Otherwise, show only the clicked series so the graph acts like a filter.
     this.commandsPerNodeLegend.forEach((item, i) => {
       item.hidden = clickedIsOnlyVisible ? false : i !== index;
 
