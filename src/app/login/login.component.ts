@@ -66,8 +66,10 @@ export class LoginComponent implements OnInit, OnDestroy {
   get password() { return this.loginForm.get('password'); }
 
   ngOnInit(): void {
-    this.startAutoRotate();
-  }
+  this.startAutoRotate();
+
+  import('../dashboard/dashboard.component');
+}
 
   ngOnDestroy(): void {
     clearInterval(this.slideInterval);
@@ -86,28 +88,40 @@ export class LoginComponent implements OnInit, OnDestroy {
     this.currentSlide = index;
     this.startAutoRotate();
   }
+  
 
   onSubmit(): void {
-    if (this.loginForm.invalid) {
-      this.loginForm.markAllAsTouched();
-      return;
-    }
-
-    this.loading = true;
-    this.loginError = null;
-    const { username, password, rememberMe } = this.loginForm.value;
-
-    this.authService.login(username, password, rememberMe).subscribe({
-      next: () => {
-        this.loading = false;
-        this.router.navigate(['/dashboard']);
-      },
-      error: (err) => {
-        this.loading = false;
-        const msg = err?.error?.message || 'Invalid user name or password.';
-        this.loginError = msg;
-        this.snackBar.open(msg, 'Close', { duration: 3000 });
-      }
-    });
+  if (this.loginForm.invalid) {
+    this.loginForm.markAllAsTouched();
+    return;
   }
+
+  this.loading = true;
+  this.loginError = null;
+
+  const { username, password, rememberMe } = this.loginForm.value;
+
+  this.authService.login(username, password, rememberMe).subscribe({
+    next: async () => {
+      await this.router.navigateByUrl('/dashboard', {
+        replaceUrl: true
+      });
+
+      this.loading = false;
+    },
+
+    error: (err) => {
+      this.loading = false;
+
+      const msg =
+        err?.error?.message || 'Invalid user name or password.';
+
+      this.loginError = msg;
+
+      this.snackBar.open(msg, 'Close', {
+        duration: 3000
+      });
+    }
+  });
+}
 }

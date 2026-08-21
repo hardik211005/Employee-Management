@@ -10,6 +10,12 @@ export const routes: Routes = [
   { path: 'login', component: LoginComponent },
   { path: 'signup', component: SignupComponent },
   { path: 'forgot-password', component: ForgotPasswordComponent },
-  { path: 'dashboard', component: DashboardComponent, canActivate: [authGuard] },
+  {
+  path: 'dashboard',
+  canActivate: [authGuard],
+  loadComponent: () =>
+    import('./dashboard/dashboard.component')
+      .then(m => m.DashboardComponent)
+},
   { path: '**', redirectTo: 'login' }
 ];
