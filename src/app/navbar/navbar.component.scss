@@ -10,6 +10,15 @@
   background: linear-gradient(90deg, #1e2a78 0%, #2f3fa8 45%, #3d5be0 100%) !important;
 }
 
+::ng-deep .logout-item:hover {
+  background-color: rgba(224, 67, 61, 0.08) !important;
+
+  .mat-icon,
+  span {
+    color: #e0433d !important;
+  }
+}
+
 .brand {
   display: flex;
   align-items: center;
